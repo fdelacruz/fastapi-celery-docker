@@ -3,3 +3,5 @@ uvicorn[standard]==0.25.0
 celery==5.3.6
 redis==5.0.1
 flower==2.0.1
+SQLAlchemy==2.0.25
+alembic==1.13.1

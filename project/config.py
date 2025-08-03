@@ -20,6 +20,8 @@ class BaseConfig:
         "redis://127.0.0.1:6379/0",
     )
 
+    broker_connection_retry_on_startup: bool = True
+
 
 class DevelopmentConfig(BaseConfig):
     pass

@@ -31,6 +31,10 @@ def create_app() -> FastAPI:
 
     app.include_router(ws_router)
 
+    from project.ws.views import register_socketio_app
+
+    register_socketio_app(app)
+
     @app.get("/")
     async def root():
         return {"message": "Hello, World!"}

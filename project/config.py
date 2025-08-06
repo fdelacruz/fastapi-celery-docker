@@ -22,6 +22,10 @@ class BaseConfig:
 
     broker_connection_retry_on_startup: bool = True
 
+    WS_MESSAGE_QUEUE: str = os.environ.get(
+        "WS_MESSAGE_QUEUE", "redis://127.0.0.1:6379/0"
+    )
+
 
 class DevelopmentConfig(BaseConfig):
     pass

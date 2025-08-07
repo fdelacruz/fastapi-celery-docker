@@ -6,6 +6,13 @@ from typing import List
 from kombu import Queue
 
 
+def route_task(name, args, kwargs, options, task=None, **kw):
+    if ":" in name:
+        queue, _ = name.split(":")
+        return {"queue": queue}
+    return {"queue": "default"}
+
+
 class BaseConfig:
     BASE_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
 
@@ -47,11 +54,7 @@ class BaseConfig:
         Queue("low_priority"),
     ]
 
-    task_routes = {
-        "project.users.tasks.*": {
-            "queue": "high_priority",
-        },
-    }
+    task_routes = (route_task,)
 
 
 class DevelopmentConfig(BaseConfig):

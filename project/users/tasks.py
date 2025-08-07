@@ -28,20 +28,18 @@ def sample_task(email):
     api_call(email)
 
 
-@shared_task(bind=True)
+@shared_task(
+    bind=True,
+    autoretry_for=(Exception,),
+    retry_kwargs={"max_retries": 7, "countdown": 5},
+)
 def task_process_notification(self):
-    try:
-        if not random.choice([0, 1]):
-            # mimic random error
-            raise Exception("Simulated random failure")
+    if not random.choice([0, 1]):
+        # mimic random error
+        raise Exception("Simulated random failure")
 
-        # this would block the I/O
-        requests.post("https://httpbin.org/delay/5")
-    except Exception as e:
-        logger.error(
-            f"{self.name}[{self.request.id}]: exception raised, it would be retry after 5 seconds"
-        )
-        raise self.retry(exc=e, countdown=5)
+    # this would block the I/O
+    requests.post("https://httpbin.org/delay/5")
 
 
 @task_postrun.connect

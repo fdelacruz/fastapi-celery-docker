@@ -1,8 +1,7 @@
 import random
-
 import requests
 from asgiref.sync import async_to_sync
-from celery import shared_task
+from celery import Task, shared_task
 from celery.signals import task_postrun
 from celery.utils.log import get_task_logger
 
@@ -28,19 +27,17 @@ def sample_task(email):
     api_call(email)
 
 
-@shared_task(
-    bind=True,
-    autoretry_for=(Exception,),
-    retry_backoff=5,
-    retry_jitter=True,
-    retry_kwargs={"max_retries": 7, "countdown": 5},
-)
+class BaseTaskWithRetry(Task):
+    autoretry_for = (Exception, KeyError)
+    retry_kwargs = {"max_retries": 5}
+    retry_backoff = True
+
+
+@shared_task(bind=True, base=BaseTaskWithRetry)
 def task_process_notification(self):
     if not random.choice([0, 1]):
         # mimic random error
         raise Exception("Simulated random failure")
-
-    # this would block the I/O
     requests.post("https://httpbin.org/delay/5")
 
 

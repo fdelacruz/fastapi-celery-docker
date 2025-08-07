@@ -32,6 +32,7 @@ def sample_task(email):
     bind=True,
     autoretry_for=(Exception,),
     retry_backoff=5,
+    retry_jitter=True,
     retry_kwargs={"max_retries": 7, "countdown": 5},
 )
 def task_process_notification(self):

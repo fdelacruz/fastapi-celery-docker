@@ -15,7 +15,7 @@ class BaseConfig:
         "CELERY_BROKER_URL",
         "redis://127.0.0.1:6379/0",
     )
-    result_backend = str = os.environ.get(
+    result_backend: str = os.environ.get(
         "CELERY_RESULT_BACKEND",
         "redis://127.0.0.1:6379/0",
     )

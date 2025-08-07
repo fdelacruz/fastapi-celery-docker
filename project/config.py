@@ -1,6 +1,9 @@
 import os
+from typing import List
 import pathlib
 from functools import lru_cache
+
+from kombu import Queue
 
 
 class BaseConfig:
@@ -32,6 +35,15 @@ class BaseConfig:
     #         "schedule": 5.0,  # five seconds
     #     },
     # }
+
+    task_default_queue: str = "default"
+
+    task_create_missing_queues: bool = False
+    task_queues: List[Queue] = [
+        Queue("default"),
+        Queue("high_priority"),
+        Queue("low_priority"),
+    ]
 
 
 class DevelopmentConfig(BaseConfig):

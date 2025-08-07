@@ -33,12 +33,14 @@ def task_process_notification(self):
     try:
         if not random.choice([0, 1]):
             # mimic random error
-            raise Exception()
+            raise Exception("Simulated random failure")
 
         # this would block the I/O
         requests.post("https://httpbin.org/delay/5")
     except Exception as e:
-        logger.error("exception raised, it would be retry after 5 seconds")
+        logger.error(
+            f"{self.name}[{self.request.id}]: exception raised, it would be retry after 5 seconds"
+        )
         raise self.retry(exc=e, countdown=5)
 
 

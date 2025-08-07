@@ -47,6 +47,12 @@ class BaseConfig:
         Queue("low_priority"),
     ]
 
+    task_routes = {
+        "project.users.tasks.*": {
+            "queue": "high_priority",
+        },
+    }
+
 
 class DevelopmentConfig(BaseConfig):
     pass

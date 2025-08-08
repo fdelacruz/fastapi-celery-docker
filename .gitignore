@@ -67,6 +67,9 @@ db.sqlite3
 instance/
 .webassets-cache
 
+# Fastapi stuff:
+test.db
+
 # Scrapy stuff:
 .scrapy
 

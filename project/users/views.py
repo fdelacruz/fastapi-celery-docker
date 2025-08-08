@@ -4,7 +4,7 @@ from string import ascii_lowercase
 
 import requests
 from celery.result import AsyncResult
-from fastapi import Body, Depends, FastAPI, Request
+from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -100,6 +100,10 @@ def transaction_celery(session: Session = Depends(get_db_session)):
     )
     with session.begin():
         session.add(user)
+
+    logger.info(f"user {user.id} {user.username} is persistent now")
+    task_send_welcome_email.delay(user.id)
+    return {"message": "done"}
 
     print(f"user {user.id} {user.username} is persistent now")
     task_send_welcome_email.delay(user.id)

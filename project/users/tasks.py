@@ -1,9 +1,11 @@
+import logging
 import random
 
 import requests
 from asgiref.sync import async_to_sync
 from celery import Task, shared_task
 from celery.signals import task_postrun
+from celery.signals import after_setup_logger, task_postrun
 from celery.utils.log import get_task_logger
 
 from project.database import db_context
@@ -11,6 +13,12 @@ from project.database import db_context
 logger = get_task_logger(__name__)
 
 
+@after_setup_logger.connect()
+def on_after_setup_logger(logger, **kwargs):
+    formatter = logger.handlers[0].formatter
+    file_handler = logging.FileHandler("celery.log")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
 @shared_task
 def divide(x, y):
     # from celery.contrib import rdb

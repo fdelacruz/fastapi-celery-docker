@@ -4,7 +4,6 @@ import random
 import requests
 from asgiref.sync import async_to_sync
 from celery import Task, shared_task
-from celery.signals import task_postrun
 from celery.signals import after_setup_logger, task_postrun
 from celery.utils.log import get_task_logger
 
@@ -19,6 +18,8 @@ def on_after_setup_logger(logger, **kwargs):
     file_handler = logging.FileHandler("celery.log")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
+
 @shared_task
 def divide(x, y):
     # from celery.contrib import rdb
@@ -95,3 +96,18 @@ def task_send_welcome_email(user_pk):
 @shared_task
 def task_test_logger():
     logger.info("test")
+
+
+@shared_task(bind=True)
+def task_add_subscribe(self, user_pk):
+    with db_context() as session:
+        try:
+            from project.users.models import User
+
+            user = session.get(User, user_pk)
+            requests.post(
+                "https://httpbin.org/delay/5",
+                data={"email": user.email},
+            )
+        except Exception as exc:
+            raise self.retry(exc=exc)

@@ -4,13 +4,10 @@ import pytest
 import requests
 from celery.exceptions import Retry
 
-from project.users.factories import UserFactory
 from project.users.tasks import task_add_subscribe
 
 
-def test_post_succeed(db_session, monkeypatch):
-    user = UserFactory.create()
-
+def test_post_succeed(db_session, monkeypatch, user):
     mock_requests_post = mock.MagicMock()
     monkeypatch.setattr(requests, "post", mock_requests_post)
 
@@ -21,9 +18,7 @@ def test_post_succeed(db_session, monkeypatch):
     )
 
 
-def test_exception(db_session, monkeypatch):
-    user = UserFactory.create()
-
+def test_exception(db_session, monkeypatch, user):
     mock_requests_post = mock.MagicMock()
     monkeypatch.setattr(requests, "post", mock_requests_post)
 

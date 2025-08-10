@@ -16,3 +16,4 @@ python-socketio==5.7.1
 pytest==7.4.4
 httpx==0.26.0
 factory-boy==3.3.0
+pytest-factoryboy==2.6.0

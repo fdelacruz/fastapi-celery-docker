@@ -4,6 +4,11 @@ import pytest
 
 os.environ["FASTAPI_CONFIG"] = "testing"  # noqa
 
+from pytest_factoryboy import register
+from project.users.factories import UserFactory
+
+register(UserFactory)
+
 
 @pytest.fixture
 def settings():

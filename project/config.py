@@ -25,6 +25,8 @@ class BaseConfig:
         "WS_MESSAGE_QUEUE", "redis://127.0.0.1:6379/0"
     )
 
+    UPLOADS_DEFAULT_DEST: str = str(BASE_DIR / "upload")
+
     # Celery configuration
     broker_url: str = os.environ.get(
         "CELERY_BROKER_URL",

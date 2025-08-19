@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 from project.config import settings
 
-broadcast = Broadcast(settings.WS_MESSAGE_QUEUE)
+broadcast = Broadcast(url=settings.WS_MESSAGE_QUEUE)
 
 
 @asynccontextmanager
